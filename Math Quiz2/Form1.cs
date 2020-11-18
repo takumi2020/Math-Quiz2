@@ -25,6 +25,9 @@ namespace Math_Quiz2
         int minuend;
         int subtrahend;
 
+        int multiplicand;
+        int multiplier;
+
         int timeLeft;
 
         public startButton()
@@ -57,9 +60,15 @@ namespace Math_Quiz2
             minusRightLabel.Text = subtrahend.ToString();
             difference.Value = 0;
 
+            multiplicand = randomizer.Next(2, 11);
+            multiplier = randomizer.Next(2, 11);
+            timesLeftLabel.Text = multiplicand.ToString();
+            timesRightLabel.Text = multiplier.ToString();
+            product.Value = 0;
+
             // Start the timer.
-            timeLeft = 10;
-            timeLabel.Text = "10 seconds";
+            timeLeft = 30;
+            timeLabel.Text = "30 seconds";
             timer1.Start();
         }
 
@@ -99,6 +108,8 @@ namespace Math_Quiz2
                 timeLabel.Text = "Time's up!";
                 MessageBox.Show("You didn't finish in time.", "Sorry!");
                 sum.Value = addend1 + addend2;
+                difference.Value = minuend - subtrahend;
+                product.Value = multiplicand * multiplier;
                 button1.Enabled = true;
             }
         }
@@ -109,7 +120,8 @@ namespace Math_Quiz2
         private bool CheckTheAnswer()
         {
             if ((addend1 + addend2 == sum.Value)
-                && (minuend - subtrahend == difference.Value))
+                && (minuend - subtrahend == difference.Value)
+                && (multiplicand * multiplier == product.Value))
                 return true;
             else
                 return false;

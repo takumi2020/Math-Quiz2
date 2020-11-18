@@ -20,6 +20,11 @@ namespace Math_Quiz2
         int addend1;
         int addend2;
 
+        // These integer variables store the numbers 
+        // for the subtraction problem. 
+        int minuend;
+        int subtrahend;
+
         int timeLeft;
 
         public startButton()
@@ -46,9 +51,15 @@ namespace Math_Quiz2
             // adding any values to it.
             sum.Value = 0;
 
+            minuend = randomizer.Next(1, 101);
+            subtrahend = randomizer.Next(1, minuend);
+            minusLeftLabel.Text = minuend.ToString();
+            minusRightLabel.Text = subtrahend.ToString();
+            difference.Value = 0;
+
             // Start the timer.
-            timeLeft = 30;
-            timeLabel.Text = "30 seconds";
+            timeLeft = 10;
+            timeLabel.Text = "10 seconds";
             timer1.Start();
         }
 
@@ -61,16 +72,28 @@ namespace Math_Quiz2
 
         private void timer1_Tick_1(object sender, EventArgs e)
         {
-            if (timeLeft > 0)
+            if (CheckTheAnswer())
             {
-                // Display the new time left
-                // by updating the Time Left label.
-                timeLeft = timeLeft - 1;
+                // If CheckTheAnswer() returns true, then the user 
+                // got the answer right. Stop the timer  
+                // and show a MessageBox.
+                timer1.Stop();
+                MessageBox.Show("You got all the answers right!",
+                                "Congratulations!");
+                button1.Enabled = true;
+            }
+            else if (timeLeft > 0)
+            {
+                // If CheckTheAnswer() return false, keep counting
+                // down. Decrease the time left by one second and 
+                // display the new time left by updating the 
+                // Time Left label.
+                timeLeft--;
                 timeLabel.Text = timeLeft + " seconds";
             }
             else
             {
-                // If the user ran out of time, stop the timer, show
+                // If the user ran out of time, stop the timer, show 
                 // a MessageBox, and fill in the answers.
                 timer1.Stop();
                 timeLabel.Text = "Time's up!";
@@ -78,7 +101,30 @@ namespace Math_Quiz2
                 sum.Value = addend1 + addend2;
                 button1.Enabled = true;
             }
+        }
+        /// <summary>
+        /// Check the answer to see if the user got everything right.
+        /// </summary>
+        /// <returns>True if the answer's correct, false otherwise.</returns>
+        private bool CheckTheAnswer()
+        {
+            if ((addend1 + addend2 == sum.Value)
+                && (minuend - subtrahend == difference.Value))
+                return true;
+            else
+                return false;
+        }
 
+        private void answer_Enter(object sender, EventArgs e)
+        {
+            // Select the whole answer in the NumericUpDown control.
+            NumericUpDown answerBox = sender as NumericUpDown;
+
+            if (answerBox != null)
+            {
+                int lengthOfAnswer = answerBox.Value.ToString().Length;
+                answerBox.Select(0, lengthOfAnswer);
+            }
         }
     }
 }
